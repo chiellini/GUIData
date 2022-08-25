@@ -7,8 +7,33 @@ import pandas as pd
 
 from utils.cell_tree import construct_celltree, read_new_cd
 
+# [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
+max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
+# ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
+#                     '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
+#                     '200117plc1pop1ip3']
+embryo_names = ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
+                     '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
+                     '200117plc1pop1ip3']
+for idx,embryo_name in enumerate(embryo_names):
+    for i in range(max_times[idx]+1):
+        path_tmp = os.path.join(
+            r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v0.1\\',
+            embryo_name, 'LostCell')
 
-cd_file = r"D:\ProjectData\AllRawData\200109plc1p1\aceNuc\CD200109plc1p1.csv"
+        try:
+            os.makedirs(path_tmp)
+
+        except:
+            print(path_tmp,'existsss')
+        with open(os.path.join(path_tmp,'{}_{}_lostCell.txt'.format(embryo_name,str(i).zfill(3))), 'w') as fp:
+            pass
+        fp.close()
+        # os.open(,'a').close()
+
+
+
+# cd_file = r"D:\ProjectData\AllRawData\200109plc1p1\aceNuc\CD200109plc1p1.csv"
 # name_file = r'D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\Dataset\number_dictionary.csv'
 #
 # lost_folder = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\5_GUIer\GUIWeb\WebData_v7\200109plc1p1\LostCell"
@@ -127,29 +152,29 @@ from utils.data_io import read_txt_cd
 # ==========================================
 # Resave cells to be deleted in mutant cells
 # ==========================================
-src_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\DeletedCellsRaw\RECORD.csv"
-name_dictionary = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\number_dictionary.csv"
-
-pd_number = pd.read_csv(name_dictionary, names=["name", "label"])
-name_dict = dict(zip(pd_number.name, pd_number.label))
-pd_data1 = pd.read_csv(src_file, header=0)
-pd_data1["Embryo Name"] = pd_data1.apply(lambda row: row["Embryo Name"][2:], axis=1)
-
-pd_data1["Label"] = pd_data1.apply(lambda row: name_dict[row["Cell Name"]], axis=1)
-pd_data1["File Info"] = pd_data1.apply(lambda row: "_".join([row["Embryo Name"], str(row["Time Point"]).zfill(3), str(row["Label"])]), axis=1)
-
-
-
-src_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\DeletedCellsRaw\RecordNew.csv"
-pd_data2 = pd.read_csv(src_file, header=0)
-pd_data2["Embryo Name"] = pd_data2.apply(lambda row: row["Embryo Name"][2:], axis=1)
-
-pd_data2["Label"] = pd_data2.apply(lambda row: name_dict[row["Cell Name"]], axis=1)
-pd_data2["File Info"] = pd_data2.apply(lambda row: "_".join([row["Embryo Name"], str(row["Time Point"]).zfill(3), str(row["Label"])]), axis=1)
-
-
-pd_data = pd.concat([pd_data1, pd_data2], ignore_index=True)
-pd_data = pd_data.sort_values(by=["File Info"])
-
-dst_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\AllDeleted.csv"
-pd_data.to_csv(dst_file, index=False)
+# src_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\DeletedCellsRaw\RECORD.csv"
+# name_dictionary = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\number_dictionary.csv"
+#
+# pd_number = pd.read_csv(name_dictionary, names=["name", "label"])
+# name_dict = dict(zip(pd_number.name, pd_number.label))
+# pd_data1 = pd.read_csv(src_file, header=0)
+# pd_data1["Embryo Name"] = pd_data1.apply(lambda row: row["Embryo Name"][2:], axis=1)
+#
+# pd_data1["Label"] = pd_data1.apply(lambda row: name_dict[row["Cell Name"]], axis=1)
+# pd_data1["File Info"] = pd_data1.apply(lambda row: "_".join([row["Embryo Name"], str(row["Time Point"]).zfill(3), str(row["Label"])]), axis=1)
+#
+#
+#
+# src_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\DeletedCellsRaw\RecordNew.csv"
+# pd_data2 = pd.read_csv(src_file, header=0)
+# pd_data2["Embryo Name"] = pd_data2.apply(lambda row: row["Embryo Name"][2:], axis=1)
+#
+# pd_data2["Label"] = pd_data2.apply(lambda row: name_dict[row["Cell Name"]], axis=1)
+# pd_data2["File Info"] = pd_data2.apply(lambda row: "_".join([row["Embryo Name"], str(row["Time Point"]).zfill(3), str(row["Label"])]), axis=1)
+#
+#
+# pd_data = pd.concat([pd_data1, pd_data2], ignore_index=True)
+# pd_data = pd_data.sort_values(by=["File Info"])
+#
+# dst_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\AllDeleted.csv"
+# pd_data.to_csv(dst_file, index=False)
