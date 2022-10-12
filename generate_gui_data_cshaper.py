@@ -56,9 +56,11 @@ for sample_id in range(4, 21, 1):
 #                       "200326plc1p3", "200326plc1p4", "200122plc1lag1ip2"],
 #                }
 
-save_folder = r"D:\BaiduNetdiskWorkspace\GUIData\WebData_cshaper_v1"
-data_folder = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\6_NCommunication\Submission\CShaper Supplementary Data\Segmentation Results"
-name_file = data_folder + "/name_dictionary.csv"
+save_folder = r"D:\MembraneProjectData\GUIData\WebData_cshaper_v2"
+seg_data_folder = r"D:\project_tem\UpdatedSegmentedCell"
+raw_data_folder=r'D:\MembraneProjectData\GUIData\WebData_cshaper_v1'
+stat_data_path=r'D:\project_tem\Stat'
+name_file_path = "./name_dictionary_cshaper.csv"
 
 # max_times = {"191108plc1p1":205, "200109plc1p1":205, "200323plc1p1":185, "200326plc1p3":220, "200326plc1p4":195, "200113plc1p2":255,
 #              "200113plc1p3": 195, "200322plc1p2":195, "200122plc1lag1ip1":195, "200122plc1lag1ip2":195}
@@ -67,24 +69,25 @@ name_file = data_folder + "/name_dictionary.csv"
 
 
 
-pd_number = pd.read_csv(name_file, names=["name", "label"])
-number_dict = pd.Series(pd_number.label.values, index=pd_number.name).to_dict()
-print(number_dict)
+pd_number = pd.read_csv(name_file_path, names=["name", "label"])
+name2label_dict = pd.Series(pd_number.label.values, index=pd_number.name).to_dict()
+# print(name2label_dict)
 
-label2name_dict = dict((k, v) for k, v in number_dict.items())
-name2label_dict = dict((v, k) for k, v in number_dict.items())
-
-print(label2name_dict)
-print(name2label_dict)
+label2name_dict = dict((v, k) for k, v in name2label_dict.items())
+#
+# print(label2name_dict)
+# print(name2label_dict)
 
 all_lost_cells = []
 if Updata_Stat:
     for embryo_name in tqdm(embryo_names, desc="Updating files from CShaper"):
+        if not os.path.exists(os.path.join(save_folder, embryo_name)):
+            os.makedirs(os.path.join(save_folder, embryo_name))
 
         volume_coefficient=(0.25)**3
         surface_coefficient=(0.25)**2
 
-        volume_pd=pd.read_csv(os.path.join(data_folder, "VolumeAndSurface", embryo_name + "_volume.csv"), header=0, index_col=0)
+        volume_pd=pd.read_csv(os.path.join(stat_data_path, embryo_name + "_volume.csv"), header=0, index_col=0)
         volume_pd.index = list(range(1, len(volume_pd.index) + 1, 1))
         volume_pd=volume_pd*volume_coefficient
         volume_pd.to_csv(os.path.join(save_folder, embryo_name, embryo_name + "_volume.csv"))
@@ -93,7 +96,7 @@ if Updata_Stat:
         #                 os.path.join(save_folder, embryo_name, embryo_name + "_volume.csv"))
         # contact (with transpose)
 
-        surface_pd = pd.read_csv(os.path.join(data_folder, "VolumeAndSurface", embryo_name + "_surface.csv"), header=0,
+        surface_pd = pd.read_csv(os.path.join(stat_data_path, embryo_name + "_surface.csv"), header=0,
                                  index_col=0)
         surface_pd.index = list(range(1, len(surface_pd.index) + 1, 1))
         surface_pd=surface_pd*surface_coefficient
@@ -102,7 +105,7 @@ if Updata_Stat:
         # move_file(os.path.join(data_folder, "VolumeAndSurface", embryo_name + "_surface.csv"),
         #                 os.path.join(save_folder, embryo_name, embryo_name + "_surface.csv"))
 
-        contact_pd = pd.read_csv(os.path.join(data_folder, "ContactInterface", embryo_name + "_Stat.csv"), header=[0, 1], index_col=0).T
+        contact_pd = pd.read_csv(os.path.join(stat_data_path, embryo_name + "_Stat.csv"), header=[0, 1], index_col=0).T
         contact_pd=contact_pd*surface_coefficient
         contact_pd.to_csv(os.path.join(save_folder, embryo_name, embryo_name + "_Stat.csv"))
         # print(contact_pd*surface_coefficient)
@@ -115,9 +118,9 @@ if COPY_FILE:
     # volume
     for embryo_name in tqdm(embryo_names, desc="Moving files from CShaper"):
 
-        raw_folder = os.path.join(data_folder, "RawData", embryo_name, "RawMemb")
+        raw_folder = os.path.join(raw_data_folder, embryo_name, "RawMemb")
         raw_files = glob.glob(os.path.join(raw_folder, "*.nii.gz"))
-        seg_folder = os.path.join(data_folder, "SegmentedCell", "{}LabelUnified".format(embryo_name))
+        seg_folder = os.path.join(seg_data_folder, embryo_name)
         seg_files = glob.glob(os.path.join(seg_folder, "*.nii.gz"))
         save_file = os.path.join(raw_folder, embryo_name, "SegCell", os.path.basename(raw_files[0]))
         check_folder(save_file)
@@ -129,7 +132,7 @@ if COPY_FILE:
             save_file = os.path.join(save_folder, embryo_name, "SegCell", os.path.basename(seg_file))
             move_file(seg_file, save_file)
 
-    move_file(name_file, save_folder + "/name_dictionary.csv")
+    move_file(raw_data_folder+ "/name_dictionary.csv", save_folder + "/name_dictionary.csv")
 
 
 # =================== save cell life span ======================================
@@ -137,16 +140,16 @@ if COPY_FILE:
 for embryo_name in embryo_names:
     print("Processing {} \n".format(embryo_name))
 
-    volume_file = os.path.join(data_folder, "VolumeAndSurface", "{}_volume.csv".format(embryo_name))
-    contact_file = os.path.join(data_folder, "ContactInterface", "{}_Stat.csv".format(embryo_name))
-    ace_file = os.path.join(data_folder, "RawData", embryo_name, "CD{}.txt".format(embryo_name))
+    volume_file = os.path.join(stat_data_path, embryo_name + "_volume.csv")
+    contact_file = os.path.join(stat_data_path, embryo_name + "_Stat.csv")
+    ace_file = os.path.join('D:\cell_shape_quantification\DATA\Segmentation Results\RawData', embryo_name, "CD{}.txt".format(embryo_name))
 
     volume_pd = pd.read_csv(volume_file, header=0, index_col=0)
     volume_pd.index = list(range(1, len(volume_pd.index) + 1, 1))
     contact_pd = pd.read_csv(contact_file, header=[0, 1], index_col=0)
     ace_pd = pd.read_csv(ace_file, engine='python',  delimiter="    ", header=0, index_col=False)
     ace_pd.columns = ["cell", "time", "z", "x", "y"]
-    celltree, _ = construct_celltree(ace_file, len(volume_pd.index), name_file, read_old=True)
+    celltree, _ = construct_celltree(ace_file, len(volume_pd.index), label2name_dict, read_old=True)
 
     # save cells at tp,
     if TP_CELLS_FLAGE:

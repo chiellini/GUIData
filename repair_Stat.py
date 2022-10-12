@@ -26,8 +26,8 @@ def moveStatFile():
                                  embryo_name + '_Stat.csv'))
 
 def CShaperAddZeroToUnresonableBlank():
-    current_folder = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_cshaper_v1\\'
-    data_folder = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_cshaper_v1.1\\'
+    current_folder = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_cshaper_v2\\'
+    data_folder = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_cshaper_v2\\'
 
     embryo_names = []
     for sample_id in range(4, 21, 1):
@@ -120,4 +120,4 @@ def CMapAddZeroToUnresonableBlank():
         contact_file.to_csv(os.path.join(data_folder,embryo_name,embryo_name+'_Stat.csv'))
 
 if __name__=="__main__":
-    CMapAddZeroToUnresonableBlank()
+    CShaperAddZeroToUnresonableBlank()

@@ -107,7 +107,7 @@ for embryo_name in embryo_names:
     volume_pd = pd.read_csv(volume_file, header=0, index_col=0)
     volume_pd.index = list(range(1, len(volume_pd.index) + 1, 1))
     contact_pd = pd.read_csv(contact_file, header=[0, 1], index_col=0)
-    celltree, _ = construct_celltree(ace_file, max_time=max_times[embryo_name], num_file=name_file)
+    celltree, _ = construct_celltree(ace_file, max_time=max_times[embryo_name], label2name_dict=name_file)
 
     # save cells at tp
     if TP_CELLS_FLAGE:

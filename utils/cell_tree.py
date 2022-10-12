@@ -16,7 +16,7 @@ def read_new_cd(cd_file):
 
     return df_nuc
 
-def construct_celltree(nucleus_file, max_time, num_file, read_old=False):
+def construct_celltree(nucleus_file, max_time, label2name_dict, read_old=False):
     '''
     Construct cell tree structure with cell names
     :param nucleus_file:  the name list file to the tree initilization
@@ -52,11 +52,11 @@ def construct_celltree(nucleus_file, max_time, num_file, read_old=False):
 
     # read and combine all names from different acetrees
     ## Get cell number
-    try:
-        pd_number = pd.read_csv(num_file, names=["label", "name"])
-        name2label_dict = pd.Series(data=pd_number.label.values, index=pd_number.name.values).to_dict()
-    except:
-        raise Exception("Not find number dictionary at ./dataset")
+    # try:
+    #     pd_number = pd.read_csv(label2name_dict, names=["label", "name"])
+    #     name2label_dict = pd.Series(data=pd_number.label.values, index=pd_number.name.values).to_dict()
+    # except:
+    #     raise Exception("Not find number dictionary at ./dataset")
     # =====================================
     # dynamic update the name dictionary
     # =====================================
@@ -83,6 +83,8 @@ def construct_celltree(nucleus_file, max_time, num_file, read_old=False):
     df_time = df_time[df_time.time <= max_time]
     # print(df_time)
     all_cell_names = list(df_time.cell.unique())
+    name2label_dict = dict((v, k) for k, v in label2name_dict.items())
+
     for cell_name in list(all_cell_names):
         if cell_name not in name2label_dict:
             print(cell_name, ' no exist in the dictionary')

@@ -34,7 +34,7 @@ for embryo_name in tqdm(embryo_names, desc="QC"):
     cell_names = list(volume_pd)
 
     nucleus_file = os.path.join("D:/ProjectData/AllDataPacked", embryo_name, "CD{}.csv".format(embryo_name))
-    time_tree, _ = construct_celltree(nucleus_file, max_time=embryo_TPS[embryo_name], num_file=num_file)
+    time_tree, _ = construct_celltree(nucleus_file, max_time=embryo_TPS[embryo_name], label2name_dict=num_file)
 
     # ==================================================
     # 1. Get the degree of cell volume diverge
