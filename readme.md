@@ -1,6 +1,17 @@
+
+#CMap Code
+## step
+1. generate segmentation
+2. calculate the wrong division cells in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis**.
+3. re-assign the label in **FILE test_post_segmentation.py**.
+4. re-calculate the statistical data of CMap.
+5. assemble them in the **FILE data_repair_stat_code.py** of **PROJECT MembraneProjectCode**.
+6. generate gui in **PROJECT MembraneProjectCode** with order gui=true in **FILE TRAIN_TEST.yaml**
+
+
+
+
 # CShaper Code
-
-
 ## step
 1. generate segmentation
 2. collect materials

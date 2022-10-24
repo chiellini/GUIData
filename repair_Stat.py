@@ -74,8 +74,8 @@ def CShaperAddZeroToUnresonableBlank():
         contact_file.to_csv(os.path.join(data_folder, embryo_name, embryo_name + '_Stat.csv'))
 
 def CMapAddZeroToUnresonableBlank():
-    current_folder=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v2'
-    data_folder=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v2'
+    current_folder=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3'
+    data_folder=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3'
 
     max_times = {"191108plc1p1":205, "200109plc1p1":205, "200323plc1p1":185, "200326plc1p3":220, "200326plc1p4":195, "200113plc1p2":255,
                  "200113plc1p3": 195, "200322plc1p2":195, "200122plc1lag1ip1":195, "200122plc1lag1ip2":195, "200117plc1pop1ip2":140, "200117plc1pop1ip3":155}
@@ -120,4 +120,5 @@ def CMapAddZeroToUnresonableBlank():
         contact_file.to_csv(os.path.join(data_folder,embryo_name,embryo_name+'_Stat.csv'))
 
 if __name__=="__main__":
-    CShaperAddZeroToUnresonableBlank()
+    # CShaperAddZeroToUnresonableBlank()
+    CMapAddZeroToUnresonableBlank()
