@@ -3,10 +3,10 @@
 ## step
 1. generate segmentation
 2. calculate the wrong division cells in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis**.
-3. re-assign the label in **FILE test_post_segmentation.py**.
-4. re-calculate the statistical data of CMap.
-5. assemble them in the **FILE data_repair_stat_code.py** of **PROJECT MembraneProjectCode**.
-6. generate gui in **PROJECT MembraneProjectCode** with order gui=true in **FILE TRAIN_TEST.yaml**
+3. re-assign the label in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis** with  *frozen tem data*.
+4. re-calculate the statistical data of CMap in *def update_wrong_dividing_cell_stat_CMap()* in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis**.
+5. assemble them in the **FILE data_repair_stat_code.py** of **PROJECT MembraneProjectCode** with resolution 0.18.
+6. generate gui in **PROJECT MembraneProjectCode** with only order gui=true in **FILE TRAIN_TEST.yaml**
 
 
 
