@@ -40,14 +40,15 @@ NEIGHBOR_FLAG = True
 GET_DIVISIONS = True
 COPY_FILE = True
 
-embryo_names = ["200117plc1pop1ip2", "200117plc1pop1ip3"]
+embryo_names = ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
+                      "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2",'200117plc1pop1ip2','200117plc1pop1ip3']
 
 # ==============================================================================
 # generate data for GUI
 # ==============================================================================
 res_embryos = {0.25: [],
                0.18: ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
-                      "200326plc1p3", "200326plc1p4", "200122plc1lag1ip2", "200117plc1pop1ip2", "200117plc1pop1ip3"],
+                      "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2",'200117plc1pop1ip2','200117plc1pop1ip3'],
                }
 
 save_folder = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\GUIData\DeteletedCell"

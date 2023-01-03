@@ -62,12 +62,6 @@ raw_data_folder=r'D:\MembraneProjectData\GUIData\WebData_cshaper_v1'
 stat_data_path=r'D:\project_tem\Stat'
 name_file_path = "./name_dictionary_cshaper.csv"
 
-# max_times = {"191108plc1p1":205, "200109plc1p1":205, "200323plc1p1":185, "200326plc1p3":220, "200326plc1p4":195, "200113plc1p2":255,
-#              "200113plc1p3": 195, "200322plc1p2":195, "200122plc1lag1ip1":195, "200122plc1lag1ip2":195}
-# max_slices = {"191108plc1p1":92, "200109plc1p1":92, "200323plc1p1":92, "200326plc1p3":92, "200326plc1p4":92, "200113plc1p2":92,
-#               "200113plc1p3": 92, "200322plc1p2":92, "200122plc1lag1ip1":92, "200122plc1lag1ip2":92}
-
-
 
 pd_number = pd.read_csv(name_file_path, names=["name", "label"])
 name2label_dict = pd.Series(pd_number.label.values, index=pd_number.name).to_dict()
