@@ -32,13 +32,13 @@ def transpose_csv(source_file, target_file):
         writer(fw, delimiter=',').writerows(zip(*reader(f, delimiter=',')))
 
 RENAME_FLAG = False
-CHECK_DIVISION = True
-TP_CELLS_FLAGE = True
-CELLSPAN_FLAG = True
-LOST_CELL = True
-NEIGHBOR_FLAG = True
-GET_DIVISIONS = True
-COPY_FILE = False
+CHECK_DIVISION = False
+TP_CELLS_FLAGE = False
+CELLSPAN_FLAG = False
+LOST_CELL = False
+NEIGHBOR_FLAG = False
+GET_DIVISIONS = False
+COPY_FILE = True
 
 
 embryo_names = ['Sample' + str(i).zfill(2) for i in range(4, 21)]
@@ -92,10 +92,14 @@ def change_labels(seg, label2name_dict, cell2fate, fate2label):
     new_seg = np.zeros_like(seg)
     labels = list(np.unique(seg))[1:]
     for label in labels:
-        cell_name=label2name_dict[label]
-        cell_fate=cell2fate.get(cell_name,'Unspecified')
+        cell_name = label2name_dict[label]
+        if cell_name in cell2fate.keys():
+            cell_fate = cell2fate[cell_name]
+        else:
+            cell_fate = 'Unspecified'
+            print(cell_name)
         tissue_label = fate2label[cell_fate]
-        new_seg[seg==label] = tissue_label
+        new_seg[seg == label] = tissue_label
 
     return new_seg
 

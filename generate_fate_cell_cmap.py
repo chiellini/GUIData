@@ -31,13 +31,13 @@ def transpose_csv(source_file, target_file):
     with open(source_file) as f, open(target_file, 'w', newline='') as fw:
         writer(fw, delimiter=',').writerows(zip(*reader(f, delimiter=',')))
 
-RENAME_FLAG = True
-CHECK_DIVISION = True
-TP_CELLS_FLAGE = True
-CELLSPAN_FLAG = True
-LOST_CELL = True
-NEIGHBOR_FLAG = True
-GET_DIVISIONS = True
+RENAME_FLAG = False
+CHECK_DIVISION = False
+TP_CELLS_FLAGE = False
+CELLSPAN_FLAG = False
+LOST_CELL = False
+NEIGHBOR_FLAG = False
+GET_DIVISIONS = False
 COPY_FILE = True
 
 embryo_names = ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
@@ -56,10 +56,9 @@ origin_data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong
 raw_cd_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\RawCDFiles"
 name_file = os.path.join(origin_data_folder, "number_dictionary.csv")
 
-max_times = {"191108plc1p1":205, "200109plc1p1":205, "200323plc1p1":185, "200326plc1p3":220, "200326plc1p4":195, "200113plc1p2":255,
-             "200113plc1p3": 195, "200322plc1p2":195, "200122plc1lag1ip1":195, "200122plc1lag1ip2":195}
-max_slices = {"191108plc1p1":92, "200109plc1p1":92, "200323plc1p1":92, "200326plc1p3":92, "200326plc1p4":92, "200113plc1p2":92,
-              "200113plc1p3": 92, "200322plc1p2":92, "200122plc1lag1ip1":92, "200122plc1lag1ip2":92}
+max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
+# max_slices = {"191108plc1p1":92, "200109plc1p1":92, "200323plc1p1":92, "200326plc1p3":92, "200326plc1p4":92, "200113plc1p2":92,
+#               "200113plc1p3": 92, "200322plc1p2":92, "200122plc1lag1ip1":92, "200122plc1lag1ip2":92}
 
 
 # =========================
@@ -73,7 +72,7 @@ all_fates = sorted(list(set(sorted(list(cell_fate.Fate)))))
 fate2label = dict(zip(all_fates, list(range(1, len(all_fates) + 1, 1))))
 
 pd_number = pd.read_csv(name_file, names=["name", "label"])
-print(pd_number)
+# print(pd_number)
 
 
 number_dict = pd.Series(pd_number.label.values, index=pd_number.name).to_dict()
@@ -92,7 +91,11 @@ def change_labels(seg, label2name_dict, cell2fate, fate2label):
     labels = list(np.unique(seg))[1:]
     for label in labels:
         cell_name = label2name_dict[label]
-        cell_fate = cell2fate.get(cell_name, 'Unspecified')
+        if cell_name in cell2fate.keys():
+            cell_fate=cell2fate[cell_name]
+        else:
+            cell_fate =  'Unspecified'
+            print(cell_name,'cell name fate not exist')
         tissue_label = fate2label[cell_fate]
         new_seg[seg == label] = tissue_label
 
@@ -144,7 +147,7 @@ if COPY_FILE:
 
 
 # ============================deal with calculation things===================================
-for embryo_name in embryo_names:
+for idx,embryo_name in enumerate(embryo_names):
     print("Processing {} \n".format(embryo_name))
 
     seg_folder = os.path.join(to_save_folder, embryo_name, "SegCell")
@@ -155,7 +158,7 @@ for embryo_name in embryo_names:
 
     volume_pd = pd.read_csv(volume_file, header=0, index_col=0)
     volume_pd.index = list(range(1, len(volume_pd.index) + 1, 1))
-    celltree, _ = construct_celltree(ace_file, max_time=max_times[embryo_name], label2name_dict=label2name_dict)
+    celltree, _ = construct_celltree(ace_file, max_time=max_times[idx], label2name_dict=label2name_dict)
 
     # save cells at tp
     if TP_CELLS_FLAGE:

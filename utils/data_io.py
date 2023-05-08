@@ -16,7 +16,7 @@ from skimage import morphology
 def nib_load(file_name):
     if not os.path.exists(file_name):
         raise IOError("Cannot find file {}".format(file_name))
-    return nib.load(file_name).get_data()
+    return nib.load(file_name).get_fdata()
 
 
 #==============================================

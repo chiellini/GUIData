@@ -4,32 +4,53 @@ import shutil
 from tqdm import tqdm
 from glob import glob
 import pandas as pd
+import nibabel as nib
 
 from utils.cell_tree import construct_celltree, read_new_cd
 
-# [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
-max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
-# ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
-#                     '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
-#                     '200117plc1pop1ip3']
-embryo_names = ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
-                     '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
-                     '200117plc1pop1ip3']
-for idx,embryo_name in enumerate(embryo_names):
-    for i in range(max_times[idx]+1):
-        path_tmp = os.path.join(
-            r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v0.1\\',
-            embryo_name, 'LostCell')
+# # [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
+# max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
+# # ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
+# #                     '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
+# #                     '200117plc1pop1ip3']
+# embryo_names = ['191108plc1p1', '200109plc1p1', '200113plc1p2', '200113plc1p3', '200322plc1p2', '200323plc1p1',
+#                      '200326plc1p3', '200326plc1p4', '200122plc1lag1ip1', '200122plc1lag1ip2', '200117plc1pop1ip2',
+#                      '200117plc1pop1ip3']
+#
+# src_dir=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3'
+# dst_dir=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_deleted'
+# exclude_dir = 'RawMemb'
+#
+#
+# for idx,embryo_name in enumerate(embryo_names):
+#     src_path=os.path.join(src_dir,embryo_name)
+#     dst_path=os.path.join(dst_dir,embryo_name)
+#     if not os.path.exists(dst_path):
+#         os.makedirs(dst_path)
+#     for item in os.listdir(src_path):
+#         src_path_this = os.path.join(src_path, item)
+#         dst_path_this = os.path.join(dst_path, item)
+#
+#         if os.path.isdir(src_path_this) and item != exclude_dir:
+#             shutil.copytree(src_path_this, dst_path_this)
+#         elif os.path.isfile(src_path_this):
+#             shutil.copy2(src_path_this, dst_path_this)
 
-        try:
-            os.makedirs(path_tmp)
-
-        except:
-            print(path_tmp,'existsss')
-        with open(os.path.join(path_tmp,'{}_{}_lostCell.txt'.format(embryo_name,str(i).zfill(3))), 'w') as fp:
-            pass
-        fp.close()
-        # os.open(,'a').close()
+# for idx,embryo_name in enumerate(embryo_names):
+#     for i in range(max_times[idx]+1):
+#         path_tmp = os.path.join(
+#             r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v0.1\\',
+#             embryo_name, 'LostCell')
+#
+#         try:
+#             os.makedirs(path_tmp)
+#
+#         except:
+#             print(path_tmp,'existsss')
+#         with open(os.path.join(path_tmp,'{}_{}_lostCell.txt'.format(embryo_name,str(i).zfill(3))), 'w') as fp:
+#             pass
+#         fp.close()
+#         # os.open(,'a').close()
 
 
 
@@ -178,3 +199,5 @@ from utils.data_io import read_txt_cd
 #
 # dst_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\AllDeleted.csv"
 # pd_data.to_csv(dst_file, index=False)
+
+
