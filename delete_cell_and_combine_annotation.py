@@ -69,7 +69,7 @@ def delete_and_combine_annotated_gui():
     data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3"
     filtered_file = r"F:\CMap_paper\Code\AnnotationCheck\DataSource\CMapToDrop20230420.csv"
     # seg_folder = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\GUIData\DeteletedCell"
-    save_folder = r"F:\CMap_paper\WebData_CMap_cell_label_deleted"
+    save_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_deleted"
     name_file_path = data_folder + "/name_dictionary.csv"
     raw_folder = r"F:\CMap_paper\AllDataPacked"
 
@@ -145,21 +145,30 @@ def delete_and_combine_annotated_gui():
             contact_pd = pd.read_csv(contact_file, index_col=[0, 1],header=0)
             # print(contact_pd)
             contact_pd=contact_pd.transpose()
-            # print(contact_pd)
+            # print(volume_pd.index, volume_pd.columns)
+            # print(surface_pd.index, surface_pd.columns)
+            # print(contact_pd.index, contact_pd.columns)
 
             # quit(0)
             for tp, cell_name in zip(tps, cell_names):
                 surface_pd.at[tp, cell_name] = np.NaN
                 volume_pd.at[tp, cell_name] = np.NaN
+
                 try:
-                    contact_pd.loc[tp - 1,(slice(None), cell_name)] = np.NaN
-                    contact_pd.loc[tp - 1,(cell_name, slice(None))] = np.NaN
+                    contact_pd.loc[str(tp),(slice(None), cell_name)] = np.NaN
+                    contact_pd.loc[str(tp),(cell_name, slice(None))] = np.NaN
                 except:
-                    pass
+                    print(cell_name, 'have no contact at ', tp)
+
 
             surface_pd = surface_pd.dropna(axis=1, how="all")
             volume_pd = volume_pd.dropna(axis=1, how="all")
             contact_pd = contact_pd.dropna(axis=0, how="all")
+
+            # print(volume_pd.index,volume_pd.columns)
+            # print(surface_pd.index,surface_pd.columns)
+            # print(contact_pd.index,contact_pd.columns)
+
             # change the contact surface
             # if len(cell_names) != 0:
             #     contact_pd = contact_pd.drop(cell_names, 1, level=0)

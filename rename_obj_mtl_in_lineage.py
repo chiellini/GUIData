@@ -2,10 +2,11 @@ import os
 import glob
 
 # =============rename  obj ===================
-obj_list=glob.glob(os.path.join(r'F:\CMap_paper\Figures\Figure 01\deletedobj', '*.obj'))
+obj_list=glob.glob(os.path.join(r'F:\obj_web_visulizaiton\obj_combined\200113plc1p2', '*.obj'))
+dst_folder=r'F:\CMap_paper\Figures\Movie Lineage\lineageColoredObjs'
 for obj_path in obj_list:
     print('dealing with ' + obj_path)
-    obj_save_path=os.path.join(os.path.dirname(obj_path),'lineage_'+os.path.basename(obj_path))
+    obj_save_path=os.path.join(dst_folder,'lineage_'+os.path.basename(obj_path))
     with open(obj_path) as f:
         lines = f.readlines()
     with open(obj_save_path, 'w') as f:

@@ -85,6 +85,7 @@ failed_pd["Cell Name"] = failed_pd["Cell Identity"]
 failed_pd['File Info'] = failed_pd.apply(lambda row: row['Embryo Name'] + '_' + row['Time Point'] +'_'+ row['Label'],
                                          axis=1)
 failed_pd = failed_pd.sort_values("File Info")
+failed_pd.loc[len(failed_pd.index)]=failed_pd.loc[failed_pd.index[0]]
 
 
 # ==== Multiple segs in the same file will be saved together
