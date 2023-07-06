@@ -32,13 +32,12 @@ def transpose_csv(source_file, target_file):
         writer(fw, delimiter=',').writerows(zip(*reader(f, delimiter=',')))
 
 RENAME_FLAG = False
-CHECK_DIVISION = False
-TP_CELLS_FLAGE = False
-CELLSPAN_FLAG = False
-LOST_CELL = False
-NEIGHBOR_FLAG = False
-GET_DIVISIONS = False
+TP_CELLS_FLAGE = True
+CELLSPAN_FLAG = True
+NEIGHBOR_FLAG = True
+GET_DIVISIONS = True
 COPY_FILE = True
+COPY_RAW=False
 
 embryo_names = ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
                       "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2",'200117plc1pop1ip2','200117plc1pop1ip3']
@@ -54,7 +53,7 @@ res_embryos = {0.25: [],
 to_save_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_fate"
 origin_data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3"
 raw_cd_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\RawCDFiles"
-name_file = os.path.join(origin_data_folder, "number_dictionary.csv")
+name_file_path = os.path.join(origin_data_folder, "name_dictionary.csv")
 
 max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
 # max_slices = {"191108plc1p1":92, "200109plc1p1":92, "200323plc1p1":92, "200326plc1p3":92, "200326plc1p4":92, "200113plc1p2":92,
@@ -64,24 +63,19 @@ max_times = [205, 205, 255, 195, 195, 185, 220, 195, 195, 195, 140, 155]
 # =========================
 # read cell fate
 # =========================
-fate_file = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\04paper science coroperation\Supplementary\CellFate.xls"
+fate_file = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\04paper cmap coroperation\document\CellFate.xls"
 cell_fate = pd.read_excel(fate_file, names=["Cell", "Fate"], converters={"Cell": str, "Fate": str}, header=None)
 cell_fate = cell_fate.applymap(lambda x: x[:-1])
 cell2fate = dict(zip(cell_fate.Cell, cell_fate.Fate))
 all_fates = sorted(list(set(sorted(list(cell_fate.Fate)))))
 fate2label = dict(zip(all_fates, list(range(1, len(all_fates) + 1, 1))))
 
-pd_number = pd.read_csv(name_file, names=["name", "label"])
-# print(pd_number)
+label_name_dict = pd.read_csv(name_file_path, index_col=0).to_dict()['0']
+name_label_dict = {value: key for key, value in label_name_dict.items()}
 
-
-number_dict = pd.Series(pd_number.label.values, index=pd_number.name).to_dict()
-label2name_dict = dict((v, k) for k, v in number_dict.items())
-name2label_dict = dict((k, v) for k, v in number_dict.items())
-
-log_file = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\04paper science coroperation\Supplementary\CMapPairedFate.csv"
-cell_fate["Cell label"] = cell_fate.apply(lambda x: name2label_dict[x["Cell"]], axis=1)
-cell_fate["Fate label"] = cell_fate.apply(lambda x: fate2label[x["Fate"]], axis=1)
+log_file = r"F:\CMap_paper\CMapPairedFate.csv"
+cell_fate["Cell label"] = cell_fate.apply(lambda x: name_label_dict.get(x["Cell"],None), axis=1)
+cell_fate["Fate label"] = cell_fate.apply(lambda x: fate2label.get(x["Fate"],None), axis=1)
 cell_fate.to_csv(log_file, index=False)
 # =========================
 # change to fate-wise labels
@@ -101,11 +95,10 @@ def change_labels(seg, label2name_dict, cell2fate, fate2label):
 
     return new_seg
 
-all_lost_cells = []
 # ================== copy files ==============================
 if COPY_FILE:
     # volume
-    for embryo_name in tqdm(embryo_names, desc="Moving files from GUI Cell-wise data"):
+    for embryo_name in tqdm(embryo_names, desc="Moving files to GUI Fate-wise from GUI Cell-wise data"):
         file_name = os.path.join(origin_data_folder, embryo_name, embryo_name + "_surface.csv")
         pd_data = pd.read_csv(file_name, index_col=0, header=0)
         pd_data = pd_data.applymap(lambda x: "")
@@ -138,12 +131,12 @@ if COPY_FILE:
             save_file = os.path.join(to_save_folder, embryo_name, "SegCell", os.path.basename(seg_file))
             # change cell label flag to cell fate
             seg = nib_load(seg_file)
-            seg = change_labels(seg, label2name_dict, cell2fate, fate2label)
+            seg = change_labels(seg, label_name_dict, cell2fate, fate2label)
             nib_save(seg, save_file)
-
-            save_file = os.path.join(to_save_folder, embryo_name, "RawMemb", os.path.basename(raw_file))
-            move_file(raw_file, save_file)
-    move_file(name_file, to_save_folder + "/name_dictionary.csv")
+            if COPY_RAW:
+                save_file = os.path.join(to_save_folder, embryo_name, "RawMemb", os.path.basename(raw_file))
+                move_file(raw_file, save_file)
+    # move_file(name_file, to_save_folder + "/name_dictionary.csv")
 
 
 # ============================deal with calculation things===================================
@@ -158,7 +151,7 @@ for idx,embryo_name in enumerate(embryo_names):
 
     volume_pd = pd.read_csv(volume_file, header=0, index_col=0)
     volume_pd.index = list(range(1, len(volume_pd.index) + 1, 1))
-    celltree, _ = construct_celltree(ace_file, max_time=max_times[idx], label2name_dict=label2name_dict)
+    celltree, _ = construct_celltree(ace_file, max_time=max_times[idx], label2name_dict=label_name_dict)
 
     # save cells at tp
     if TP_CELLS_FLAGE:
@@ -214,7 +207,7 @@ for idx,embryo_name in enumerate(embryo_names):
 
             bar.update(1)
 
-        # write division
+    # write division
     if GET_DIVISIONS:
         bar = tqdm(total=len(volume_pd))
         bar.set_description("saving divisions")
@@ -236,34 +229,3 @@ for idx,embryo_name in enumerate(embryo_names):
                 f.write(write_string)
 
             bar.update(1)
-
-pd_cell_lost = pd.DataFrame(all_lost_cells)
-pd_cell_lost.to_csv(os.path.join(to_save_folder, "all_lost_cells.csv"), index=False)
-# =================================================
-# write header (https://brainder.org/2012/09/23/the-nifti-file-format/)
-# =================================================
-if RENAME_FLAG:
-    data_files = []
-    for embryo_name in embryo_names:
-        data_files += glob.glob(os.path.join(origin_data_folder, embryo_name, "*/*.nii.gz"), recursive=True)
-        # data_files += glob.glob(os.path.join(seg_folder, "*.nii.gz"))
-    data_files.sort()
-    for data_file in tqdm(data_files, desc="Adding header"):
-        img = nib.load(data_file).get_fdata()
-        img = nib.Nifti1Image(img, np.eye(4))
-        img.header.set_xyzt_units(xyz=3, t=8)
-        res_flag = False
-        for res, embryos in res_embryos.items():
-            if any([embryo in data_file for embryo in embryos]):
-                res_flag = True
-                img.header["pixdim"] = [1.0, res, res, res, 0., 0., 0., 0.]
-                base_name = os.path.basename(data_file).split(".")[0]
-                save_file = os.path.join(to_save_folder, base_name.split("_")[0], )
-                nib.save(img, data_file)
-                break
-        if not res_flag:
-            warnings.warn("No resolution for {}!".format(data_file.split("/")[-1]))
-
-# if CHECK_DIVISION:
-#     lost_file = os.path.join(save_folder, "all_lost_cells.csv")
-#     pd_lost = pd.read_csv(lost_file)

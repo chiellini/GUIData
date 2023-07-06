@@ -59,7 +59,7 @@ name_file = os.path.join(origin_data_folder, "name_dictionary.csv")
 # =========================
 # read cell fate
 # =========================
-fate_file = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\04paper science coroperation\Supplementary\CellFate.xls"
+fate_file = r"F:\CMap_paper\CellFate.xls"
 cell_fate = pd.read_excel(fate_file, names=["Cell", "Fate"], converters={"Cell": str, "Fate": str}, header=None)
 cell_fate = cell_fate.applymap(lambda x: x[:-1])
 cell2fate = dict(zip(cell_fate.Cell, cell_fate.Fate))
@@ -81,7 +81,7 @@ number_dict = pd.Series(pd_number.name.values, index=pd_number.label).to_dict()
 label2name_dict = dict((k, v) for k, v in number_dict.items())
 name2label_dict = dict((v, k) for k, v in number_dict.items())
 
-log_file = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\04paper science coroperation\Supplementary\CShaperPairedFate.csv"
+log_file = r"F:\CMap_paper\CShaperPairedFate.csv"
 cell_fate["Cell label"] = cell_fate.apply(lambda x: name2label_dict[x["Cell"]], axis=1)
 cell_fate["Fate label"] = cell_fate.apply(lambda x: fate2label[x["Fate"]], axis=1)
 cell_fate.to_csv(log_file, index=False)

@@ -10,6 +10,7 @@ import pandas as pd
 from csv import reader, writer
 
 # import user defined library
+import repair_Stat
 from utils.data_io import nib_load, nib_save
 from utils.cell_tree import construct_celltree, read_new_cd
 
@@ -55,9 +56,10 @@ def transpose_csv(source_file, target_file):
 
 def delete_and_combine_annotated_gui():
     DELETE_FAILED_CELLS = False
-    REGENERATE_OTHER_GUI_FILES = True
+    REGENERATE_OTHER_GUI_FILES = False
 
     COMBINE_ANNOTATED_GUI_FROM_DELETED_GUI=False
+    NOTE_THE_NUCLOC_FILES=True
 
     embryo_names = ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
                     "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2", '200117plc1pop1ip2',
@@ -67,11 +69,11 @@ def delete_and_combine_annotated_gui():
                  "200113plc1p3": 195, "200322plc1p2": 195, "200122plc1lag1ip1": 195, "200122plc1lag1ip2": 195,
                  "200117plc1pop1ip2": 140, "200117plc1pop1ip3": 155}
     data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3"
-    filtered_file = r"F:\CMap_paper\Code\AnnotationCheck\DataSource\CMapToDrop20230420.csv"
+    filtered_file = r"D:\GUIData\output\CMapToDrop_WT_and_MT.csv"
     # seg_folder = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\GUIData\DeteletedCell"
     save_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_deleted"
     name_file_path = data_folder + "/name_dictionary.csv"
-    raw_folder = r"F:\CMap_paper\AllDataPacked"
+    raw_folder_for_ace_lineage = r"F:\CMap_paper\AllDataPacked"
 
 
     # read name dictionary
@@ -85,6 +87,10 @@ def delete_and_combine_annotated_gui():
     failed_pd["Cell Name"] = failed_pd["Cell Identity"]
     failed_pd['File Info'] = failed_pd.apply(lambda row: row['Embryo Name'] + '_' + row['Time Point'] +'_'+ row['Label'],
                                              axis=1)
+    print(failed_pd)
+    failed_pd=failed_pd[failed_pd['Is_dead']!=1]
+    print(failed_pd)
+    # quit(9999)
     failed_pd = failed_pd.sort_values("File Info")
 
     print(failed_pd)
@@ -119,6 +125,43 @@ def delete_and_combine_annotated_gui():
                     seg_cell[seg_cell == target_label] = 0
                 target_file_name = os.path.join(save_folder, old_embryo_name, "SegCell", target_file)
                 nib_save(file_name=target_file_name, data=seg_cell)
+                # update flags
+                old_embryo_name = embryo_name
+                old_time_point = time_point
+                labels = [label]
+            else:
+                labels.append(label)
+            bar.update(1)
+    if NOTE_THE_NUCLOC_FILES:
+        # ==== Multiple deleted cells in the same nuc loc file==========
+        old_embryo_name = ""
+        old_time_point = ""
+        labels = []
+        FIRST_RUN = True
+        bar = tqdm(total=len(failed_pd.index), desc="Separating segs")
+        for i_file, file_string in failed_pd["File Info"].items():
+            embryo_name, time_point, label = file_string.split("_")
+            label = int(label)
+            if FIRST_RUN:
+                old_embryo_name = embryo_name
+                old_time_point = time_point
+                FIRST_RUN = False
+
+            if (old_time_point != time_point or old_embryo_name != embryo_name) and len(labels) != 0:
+
+                # generate seg
+                target_file = "_".join([old_embryo_name, old_time_point, "nucLoc.csv"])
+                file_name = os.path.join(r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\NucLocFiles\CMap_nucLocFile_20221223', old_embryo_name, target_file)
+                nucLoc_this=pd.read_csv(file_name,header=0)
+                # print(nucLoc_this)
+                # for target_label in labels:
+                nucLoc_this["nucleus_label"] = nucLoc_this["nucleus_label"].map(lambda x: int(x))
+
+                nucLoc_this.loc[nucLoc_this['nucleus_label'].isin(labels),'note']='Filtered'
+                # print(nucLoc_this)
+                # quit(99999)
+
+                nucLoc_this.to_csv(file_name,index=False)
                 # update flags
                 old_embryo_name = embryo_name
                 old_time_point = time_point
@@ -192,7 +235,7 @@ def delete_and_combine_annotated_gui():
 
                 write_file = os.path.join(save_folder, embryo_name, "TPCell",
                                           "{}_{}_cells.txt".format(embryo_name, str(tp).zfill(3)))
-                write_string = ",".join([str(x) for x in cell_label]) + "\n"
+                write_string = ",".join([str(int(x)) for x in cell_label]) + "\n"
                 # check_folder(write_file)
 
                 with open(write_file, "w") as f:
@@ -210,7 +253,7 @@ def delete_and_combine_annotated_gui():
                 tps = list(volume_pd[valid_index].index)
                 label_tps = [name_label_dict[cell_col]] + tps
 
-                write_string = ",".join([str(x) for x in label_tps]) + "\n"
+                write_string = ",".join([str(int(x)) for x in label_tps]) + "\n"
 
                 with open(write_file, "a") as f:
                     f.write(write_string)
@@ -249,13 +292,13 @@ def delete_and_combine_annotated_gui():
 
                     for k, v in neighbors.items():
                         labels = [k] + list(set(v))
-                        write_string = ",".join([str(x) for x in labels]) + "\n"
+                        write_string = ",".join([str(int(x)) for x in labels]) + "\n"
                         f.write(write_string)
 
                 bar.update(1)
 
             # ==================generatatatetwea lost and dividing celssssssssss====================
-            ace_file_path = os.path.join(raw_folder, embryo_name, "CD{}.csv".format(embryo_name))
+            ace_file_path = os.path.join(raw_folder_for_ace_lineage, embryo_name, "CD{}.csv".format(embryo_name))
             celltree, _ = construct_celltree(ace_file_path, max_time=max_times[embryo_name], label2name_dict=label_name_dict)
 
             all_lost_cells=[]
@@ -298,7 +341,7 @@ def delete_and_combine_annotated_gui():
 
                 write_file = os.path.join(save_folder, embryo_name, "LostCell",
                                           "{}_{}_lostCell.txt".format(embryo_name, str(tp).zfill(3)))
-                write_string = ",".join([str(x) for x in lost_cells]) + "\n"
+                write_string = ",".join([str(int(x)) for x in lost_cells]) + "\n"
                 # check_folder(write_file)
 
                 with open(write_file, "w") as f:
@@ -306,7 +349,7 @@ def delete_and_combine_annotated_gui():
 
                 write_file = os.path.join(save_folder, embryo_name, "DivisionCell",
                                           "{}_{}_division.txt".format(embryo_name, str(tp).zfill(3)))
-                write_string = ",".join([str(x) for x in division_cells]) + "\n"
+                write_string = ",".join([str(int(x)) for x in division_cells]) + "\n"
                 # check_folder(write_file)
 
                 with open(write_file, "w") as f:
@@ -383,3 +426,4 @@ def delete_and_combine_annotated_gui():
 
 if __name__ == '__main__':
     delete_and_combine_annotated_gui()
+    # todo CMapAddZeroToUnresonableBlank()
