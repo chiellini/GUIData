@@ -237,3 +237,13 @@ def get_boundary(seg, b_width=1):
     border_pixels = (border_pixels == 0).astype(np.uint8)
 
     return border_pixels * 1
+
+def nib_save(file_name, data, overwrite=False):
+    check_folder(file_name, overwrite)
+    img = nib.Nifti1Image(data, np.eye(4))
+    nib.save(img, file_name)
+
+def nib_load(file_name):
+    assert os.path.isfile(file_name), "File {} not exist".format(file_name)
+
+    return nib.load(file_name).get_fdata()

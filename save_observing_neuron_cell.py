@@ -14,15 +14,23 @@ for index in cell_fate_pd.index:
 # quit(0)
 predecent_len=3
 neuron_cells=[]
-ancestor_cells=['P2','C','Ca','Caa','Caap']
+ancestor_cells=[]
+skin_cells=[]
 
-target_cells_set=[set(neuron_cells),set(ancestor_cells)]
+IS_PLOT_NEURON_ANCESTOR=False
+IS_PLOT_SKIN=True
+if IS_PLOT_NEURON_ANCESTOR:
+    ancestor_cells=['P2','C','Ca','Caa','Caap']
+
+target_cells_set=[set(neuron_cells),set(ancestor_cells),set(skin_cells)]
 for cell_name_this,cell_fate_this in cell_fate_dict.items():
     # print(cell_name_this)
     if cell_fate_this == 'Neuron':
         target_cells_set[0].add(cell_name_this)
+    elif cell_fate_this == 'Skin':
+        target_cells_set[2].add(cell_name_this)
 
-for cell_name_this in target_cells_set[0]:
+for cell_name_this in target_cells_set[0]: # add neuron cell ancestors
     if not cell_name_this.startswith('AB'):
         print(cell_name_this)
     if len(cell_name_this) > predecent_len:
@@ -33,15 +41,19 @@ for cell_name_this in target_cells_set[0]:
 
 target_mtl_color_list=[
     [66,141,72],
-[157,157,157]
+[157,157,157],
+[248, 4, 6]
+
 ]
-target_mtl_name_list=['mat_neuron_cells','mat_ancestor_cells']
+target_mtl_name_list=['mat_neuron_cells','mat_ancestor_cells','mat_skin_cells']
 # =============resave obj ===================
 source_dir=r'F:\obj_web_visulizaiton\obj_combined\{}'.format(embryo_name_this_using)
 objs_list=glob.glob(os.path.join(source_dir,'*.obj'))
 dst_dir=r'F:\CMap_paper\Figures\Neuron Development\{}'.format(embryo_name_this_using)
+if IS_PLOT_SKIN:
+    dst_dir = r'F:\CMap_paper\Figures\Neuron Development\{}_with_skin'.format(embryo_name_this_using)
 
-output_found_cells=[{},{}]
+output_found_cells=[{},{},{}]
 
 for idx,obj_path in enumerate(objs_list):
 # for idx, targe_cell_name_list in enumerate(target_cells):
@@ -69,7 +81,13 @@ for idx,obj_path in enumerate(objs_list):
             cell_name, cell_label = line.split(' ')[1].split('\n')[0].split('_')
             # f.write(line)
             # group_name = line.split()[1]
-            if cell_name in target_cells_set[0] or cell_name in target_cells_set[1]:
+            if cell_name in target_cells_set[0]:
+                reading_selected_group = True
+                found_obj.append(cell_name)
+            elif IS_PLOT_NEURON_ANCESTOR and cell_name in target_cells_set[1]:
+                reading_selected_group = True
+                found_obj.append(cell_name)
+            elif IS_PLOT_SKIN and cell_name in target_cells_set[2]:
                 reading_selected_group = True
                 found_obj.append(cell_name)
             else:
@@ -102,6 +120,12 @@ for idx,obj_path in enumerate(objs_list):
                         output_found_cells[1][file_name] = [cell_name]
                     else:
                         output_found_cells[1][file_name].append(cell_name)
+                elif cell_name in target_cells_set[2]:
+                    selected_cell_data.append('usemtl mat_skin_cells')
+                    if not output_found_cells[2].get(file_name, False):
+                        output_found_cells[2][file_name] = [cell_name]
+                    else:
+                        output_found_cells[2][file_name].append(cell_name)
                 else:
                     raise Exception('unexpected cell name in seleting mtl of  cell data')
             else:

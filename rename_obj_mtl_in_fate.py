@@ -11,8 +11,9 @@ for index in cell_fate_pd.index:
 print(cell_fate_dict)
 # quit(0)
 # =============rename  obj ===================
-obj_list=glob.glob(os.path.join(r'F:\obj_web_visulizaiton\obj_combined\200113plc1p2', '*.obj'))
-dst_folder=r'F:\CMap_paper\Figures\Movie Fate\FateColoredObjs'
+embryo_name_this='200109plc1p1'
+obj_list=glob.glob(os.path.join(r'F:\obj_web_visulizaiton\obj_combined\{}'.format(embryo_name_this), '*.obj'))
+dst_folder=r'F:\CMap_paper\Figures\Movie Fate\{}'.format(embryo_name_this)
 for obj_path in obj_list:
     print('dealing with ' + obj_path)
     obj_save_path=os.path.join(dst_folder,'fate_'+os.path.basename(obj_path))
