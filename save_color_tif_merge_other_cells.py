@@ -14,22 +14,29 @@ from scipy.ndimage.morphology import grey_closing
 # ################# Draw videos
 label_number_first = True
 
-src_folder = r'F:\CMap_paper\Figures\NotchDiagram\3Dniigz'
-dst_folder = r"F:\CMap_paper\Figures\NotchDiagram\tiff"  # need to change to generate complete or half
+src_folder = r'F:\CMap_paper\Figures\Figure 04\niigz'
+dst_folder = r"F:\CMap_paper\Figures\Figure 04\tiff"  # need to change to generate complete or half
 
 # embryo_name_this='191108plc1p1_012_segCell_1'
 # embryo_name_this='200109plc1p1_016_segCell_2'
 # embryo_name_this='200109plc1p1_016_segCell_3'
 # embryo_name_this='200109plc1p1_055_segCell_4'
 # embryo_name_this='200109plc1p1_071_segCell_5'
-embryo_name_this='200109plc1p1_083_segCell_6'
+embryo_name_this='200113plc1p2_095_segCell'
 
 # not_transparent_cells = ['P2', 'ABp', 'ABa']
 # not_transparent_cells = ['MS', 'ABalp', 'ABala']
 # not_transparent_cells = ['MS', 'ABara', 'ABarp']
 # not_transparent_cells = ['ABalapa', 'ABalapp', 'ABplaaa', 'ABplaap']
 # not_transparent_cells = ['MSapp', 'ABplpapp', 'ABplpapa']
-not_transparent_cells = ['MSappp', 'ABplpppp', 'ABplpppa']
+# not_transparent_cells = ['MSappp', 'ABplpppp', 'ABplpppa']
+
+# not_transparent_cells = ['P2', 'ABp']
+# not_transparent_cells = ['MS', 'ABalp']
+# not_transparent_cells = ['MS', 'ABara']
+# not_transparent_cells = ['ABalapa', 'ABalapp', 'ABplaaa']
+# not_transparent_cells = ['MSapp', 'ABplpapp']
+not_transparent_cells = ['MSappp', 'ABplpppp']
 
 seg_file_reading = os.path.join(src_folder, "{}.nii.gz".format(embryo_name_this))
 # base_name = os.path.basename(seg_file_reading).split(".")[0]

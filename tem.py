@@ -125,7 +125,7 @@ from utils.cell_tree import construct_celltree, read_new_cd
 
 
 # ============= test
-from utils.data_io import read_txt_cd
+from utils.data_io import read_txt_cd, nib_load
 
 # lineage_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\6_NCommunication\Submission\CShaper Supplementary Data\Segmentation Results\RawData\Sample08\CDSample08.txt"
 # name_file = r'D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\6_NCommunication\Submission\CShaper Supplementary Data\Segmentation Results\number_dictionary.csv'
@@ -200,4 +200,18 @@ from utils.data_io import read_txt_cd
 # dst_file = r"D:\OneDriveBackup\OneDrive - City University of Hong Kong\paper\7_AtlasCell\DatasetUpdated\QC\AllDeleted.csv"
 # pd_data.to_csv(dst_file, index=False)
 
+import matplotlib.pyplot as plt
 
+showing_data=nib_load(r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Desktop\200113plc1p2_008_segMemb.nii.gz')
+out_size=[256,356,214]
+print('The middle horizontal view (xy panel)')
+plt.imshow(showing_data[:,:,out_size[2]//2], interpolation='nearest')
+plt.show()
+
+print('The middle segittal view (yz panel)')
+plt.imshow(showing_data[out_size[0]//2,:,:], interpolation='nearest')
+plt.show()
+
+print('The middle coronal view (xz panel)')
+plt.imshow(showing_data[:,out_size[1]//2,:], interpolation='nearest')
+plt.show()

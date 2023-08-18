@@ -7,7 +7,9 @@ objs_dst=r'F:\CMap_paper\Figures\Intestine Twisting\timelapseobj'
 objs_list=glob.glob(os.path.join(objs_path,'*.obj'))
 
 
-target_cells=['Z2','Z3','E',
+target_cells=[
+    # 'Z2','Z3',
+              'E',
     'Ealaad', 'Ealaav', 'Earaad', 'Earaav',
 
               'Ealpa','Earpa',

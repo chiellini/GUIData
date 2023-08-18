@@ -1,9 +1,11 @@
 import os
 import glob
+import shutil
+
 import pandas as pd
 
-obj_path=os.path.join(r'F:\CMap_paper\Figures\TissueFigureLowLossMainText\original obj', '200109plc1p1_167_segCell_whole_view.obj')
-obj_dst=r'F:\CMap_paper\Figures\TissueFigureLowLossMainText\plotting obj'
+obj_path=os.path.join(r'F:\obj_web_visulizaiton\obj_filtered\200113plc1p2', '200113plc1p2_238_segCell.obj')
+obj_dst=r'F:\CMap_paper\Figures\Figure 03\Figure3 gut supplemetary irregularity\objs'
 
 
 # target_cells=[['Z2','Z3'],
@@ -30,10 +32,12 @@ target_cells=[[]]
 cell_fate_dict={}
 cell_fate_pd=pd.read_csv(os.path.join(r'F:\CMap_paper\Figures\Movie Fate','cell_fate_dictionary.csv'),index_col=0,names=['Fate'])
 # mat_Intestin,mat_Muscle mat_Skin,mat_Pharynx,mat_Neuron
+cell_fate_target=['Intestine'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 # cell_fate_target=['Skin','Unspecified'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # cell_fate_target=['Muscle'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # cell_fate_target=['Intestine','Pharynx','Germ Cell'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-cell_fate_target=['Intestine','Pharynx','Germ Cell','Skin','Unspecified','Muscle','Neuron','Death','Others'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# cell_fate_target=['Intestine','Pharynx','Germ Cell','Skin','Unspecified','Muscle','Neuron','Death','Others'] # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 for index in cell_fate_pd.index:
     cell_fate_dict[index[:-1]]=cell_fate_pd.loc[index]['Fate'][:-1]
@@ -43,7 +47,7 @@ for cell_name_this, cell_fate_this in cell_fate_dict.items():
 
 
 print(target_cells)
-IS_CHANGING_CELL_MTL=True
+IS_CHANGING_CELL_MTL=False  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # quit(0)
 
 # =============resave obj ===================
@@ -99,10 +103,14 @@ for idx, targe_cell_name_list in enumerate(target_cells):
                 # If the line starts with 'v' (indicating a vertex), increment the facet offset
         elif line.startswith('v'):
             facet_offset += 1
-    print('found ',found_obj)
+    print('found ',found_obj,len(found_obj))
     # obj_save_path=os.path.join(os.path.dirname(obj_path),'layer_'+str(idx)+'_'+os.path.basename(obj_path))
     obj_save_path=os.path.join(obj_dst,os.path.basename(obj_path))
     # Write the selected group data to a new OBJ file
     with open(obj_save_path, 'w') as f:
         f.write('\n'.join(selected_cell_data))
+
+if not IS_CHANGING_CELL_MTL:
+    mtl_file_path=obj_path.replace('.obj','.mtl')
+    shutil.copy2(mtl_file_path, obj_dst)  # target filename is /dst/dir/file.ext
 

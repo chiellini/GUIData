@@ -1,17 +1,20 @@
 import os
 import glob
+import shutil
+
 import pandas as pd
 
-obj_path=os.path.join(r'F:\CMap_paper\Figures\Figure 01\figure1b', '200113plc1p2_016_segCell_original.obj')
-obj_dst=r'F:\CMap_paper\Figures\Figure 01\figure1b'
+obj_path=os.path.join(r'F:\obj_web_visulizaiton\obj_combined\200113plc1p2', '200113plc1p2_133_segCell.obj')
+obj_dst=r'F:\CMap_paper\Figures\Figure 04\MSpaap ABprppppp asymmetric volume\ABprppppp_objs'
+IS_CHANGING_CELL_MTL=False
 
 
-target_cells=[['ABpl']]
+target_cells=[['ABprppppp','ABprpppppa','ABprpppppp']]
+
 
 
 
 print(target_cells)
-# quit(0)
 
 # =============resave obj ===================
 for idx, targe_cell_name_list in enumerate(target_cells):
@@ -26,8 +29,11 @@ for idx, targe_cell_name_list in enumerate(target_cells):
 
     reading_selected_group=False
     selected_cell_data.append(obj_lines[0])
+    if IS_CHANGING_CELL_MTL:
+        selected_cell_data.append('mtllib designed_mat.mtl\n')
+    else:
+        selected_cell_data.append(obj_lines[1])
 
-    selected_cell_data.append(obj_lines[1])
 
     facet_offset = 0
     found_obj=[]
@@ -70,4 +76,8 @@ for idx, targe_cell_name_list in enumerate(target_cells):
     # Write the selected group data to a new OBJ file
     with open(obj_save_path, 'w') as f:
         f.write('\n'.join(selected_cell_data))
+if not IS_CHANGING_CELL_MTL:
+    mtl_file_path=obj_path.replace('.obj','.mtl')
+    shutil.copy2(mtl_file_path, obj_dst)  # target filename is /dst/dir/file.ext
+
 
