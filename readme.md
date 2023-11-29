@@ -1,10 +1,12 @@
 # The 3D Visualization Figures and GUI Data Generation
 
 Preprint:
+```
 Quantitative cell morphology in *C. elegans* embryos reveals regulations of cell volume asymmetry
 November 2023
 DOI: 10.1101/2023.11.20.567849
 LicenseCC BY-NC-ND 4.0
+```
 
 ## CMap Visualization Code
 ### Steps
