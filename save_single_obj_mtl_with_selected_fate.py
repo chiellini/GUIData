@@ -4,8 +4,8 @@ import shutil
 
 import pandas as pd
 
-obj_path=os.path.join(r'F:\obj_web_visulizaiton\obj_filtered\200113plc1p2', '200113plc1p2_238_segCell.obj')
-obj_dst=r'F:\CMap_paper\Figures\Figure 03\Figure3 gut supplemetary irregularity\objs'
+obj_path=os.path.join(r'F:\obj_web_visulizaiton\obj_filtered\191108plc1p1', '191108plc1p1_027_segCell.obj')
+obj_dst=r'F:\CMap_paper\Figures\Single cell shape demonstration\objs'
 
 
 # target_cells=[['Z2','Z3'],
