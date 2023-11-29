@@ -1,6 +1,6 @@
 
-# CMap Code
-## step
+# CMap Visualization Code
+## Steps
 1. generate segmentation
 2. calculate the wrong division cells in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis**.
 3. re-assign the label in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis** with  *frozen tem data*.
@@ -11,8 +11,8 @@
 
 
 
-# CShaper Code
-## step
+# CShaper Visualization Code
+## Steps
 1. generate segmentation
 2. collect materials
 3. generate the volume, surface area, contact surface area in **PROJECT CellShapeAnalysis**
@@ -20,7 +20,7 @@
 5. generate GUI data in this project, the 0.25**2 and **3 coefficient will applied to the data here
 6. run **FILE repair_Stat.py** in **PROJECT GUIData** to ensure the contact display in CVE software is normal.
 
-## material (path)
+*Useless Notes*
+(path)
 1. raw membrane data (raw_data_folder=r'D:\MembraneProjectData\GUIData\WebData_cshaper_v1'
  or D:\cell_shape_quantification\DATA\Segmentation Results\RawData)
-2. 
