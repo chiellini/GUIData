@@ -1,6 +1,13 @@
+# The 3D Visualization Figures and GUI Data Generation
 
-# CMap Visualization Code
-## Steps
+Preprint:
+Quantitative cell morphology in *C. elegans* embryos reveals regulations of cell volume asymmetry
+November 2023
+DOI: 10.1101/2023.11.20.567849
+LicenseCC BY-NC-ND 4.0
+
+## CMap Visualization Code
+### Steps
 1. generate segmentation
 2. calculate the wrong division cells in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis**.
 3. re-assign the label in **FILE test_post_segmentation.py** of **PROJECT CellShapeAnalysis** with  *frozen tem data*.
@@ -11,8 +18,8 @@
 
 
 
-# CShaper Visualization Code
-## Steps
+## CShaper Visualization Code
+### Steps
 1. generate segmentation
 2. collect materials
 3. generate the volume, surface area, contact surface area in **PROJECT CellShapeAnalysis**
