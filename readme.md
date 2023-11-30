@@ -2,7 +2,6 @@
 
 *CMap* Paper Preprint:
 
-==================================================================================================
 Quantitative cell morphology in *C. elegans* embryos reveals regulations of cell volume asymmetry
 
 November 2023
@@ -10,7 +9,6 @@ November 2023
 DOI: 10.1101/2023.11.20.567849
 
 LicenseCC BY-NC-ND 4.0
-==================================================================================================
 
 
 ## Generation of 3D GUI Data in *ITK-SNAP-CVE* of *CMap* paper
