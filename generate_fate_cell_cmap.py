@@ -50,8 +50,8 @@ res_embryos = {0.25: [],
                       "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2",'200117plc1pop1ip2','200117plc1pop1ip3'],
                }
 
-to_save_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_fate"
-origin_data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_v3"
+to_save_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_fate_deleted"
+origin_data_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\GUIData\WebData_CMap_cell_label_deleted"
 raw_cd_folder = r"C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\MembraneProjectData\RawCDFiles"
 name_file_path = os.path.join(origin_data_folder, "name_dictionary.csv")
 

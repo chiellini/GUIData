@@ -2,12 +2,12 @@ import cv2
 import os
 import glob
 
-image_folder = r'F:\CMap_paper\Figures\Muscle Cells\Snaps'
-video_name = r'F:\CMap_paper\Figures\Muscle Cells\muscle_up.mp4'
+image_folder = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\02paper cunmin segmentation\segmentation results\PNGS\combined_Membrane'
+video_name = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\02paper cunmin segmentation\segmentation results\PNGS\combined_Membrane\video.mp4'
 IS_FLIPPED_MIRROR=False
 
 # images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
-images=glob.glob(os.path.join(image_folder,'*up.png'))
+images=glob.glob(os.path.join(image_folder,'*.png'))
 
 # STOP_FRAME=int(len(images)*(4/5))
 

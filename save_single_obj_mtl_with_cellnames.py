@@ -12,13 +12,20 @@ import shutil
 # 'CD200113plc1p3' 'WT_Sample8'
 
 
-obj_path_root = r'F:\obj_web_visulizaiton\obj_combined\200113plc1p3'
-obj_list_to_save = ['200113plc1p3_175_segCell.obj' ]
+obj_path_root = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\02paper cunmin segmentation\segmentation results\combined_objs\190311plc1mp1'
+obj_list_to_save = ['190311plc1mp1_057_merged.obj']
 
-obj_dst = r'F:\CMap_paper\Figures\Figure 05\Caapap objs'
+
+# obj_path_root=r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\02paper cunmin segmentation\segmentation results\combined_objs\190311plc1mp1'
+# obj_list_objs_tmp=glob.glob(os.path.join(obj_path_root,'*.obj'))
+# obj_list_to_save=[]
+# for obj_tmp in obj_list_objs_tmp:
+#     obj_list_to_save.append(os.path.basename(obj_tmp))
+
+obj_dst = r'C:\Users\zelinli6\OneDrive - City University of Hong Kong - Student\Documents\02paper cunmin segmentation\figure_single_cells\Ea'
 IS_CHANGING_CELL_MTL = False
 
-target_cells = [['Caapa','Caapap','Caapaa']]
+target_cells = [['Ea','Ear', 'Eal']]
 
 print(target_cells)
 for obj_basename in obj_list_to_save:
@@ -77,11 +84,12 @@ for obj_basename in obj_list_to_save:
             elif line.startswith('v'):
                 facet_offset += 1
         print('found ', found_obj)
-        # obj_save_path=os.path.join(os.path.dirname(obj_path),'layer_'+str(idx)+'_'+os.path.basename(obj_path))
-        obj_save_path = os.path.join(obj_dst, os.path.basename(obj_path))
-        # Write the selected group data to a new OBJ file
-        with open(obj_save_path, 'w') as f:
-            f.write('\n'.join(selected_cell_data))
-    if not IS_CHANGING_CELL_MTL:
+        if len(found_obj)>0:
+            # obj_save_path=os.path.join(os.path.dirname(obj_path),'layer_'+str(idx)+'_'+os.path.basename(obj_path))
+            obj_save_path = os.path.join(obj_dst, os.path.basename(obj_path))
+            # Write the selected group data to a new OBJ file
+            with open(obj_save_path, 'w') as f:
+                f.write('\n'.join(selected_cell_data))
+    if not IS_CHANGING_CELL_MTL and len(found_obj)>0:
         mtl_file_path = obj_path.replace('.obj', '.mtl')
         shutil.copy2(mtl_file_path, obj_dst)  # target filename is /dst/dir/file.ext

@@ -189,7 +189,7 @@ for idx,obj_path in enumerate(objs_list):
         # Write the selected group data to a new OBJ file
         with open(obj_save_path, 'w') as f:
             f.write('\n'.join(selected_cell_data))
-print(mtl_settt)
+# print(mtl_settt)
 
 # with open(r'F:\CMap_paper\Figures\Intestine Twisting\E_cell_number_dict.txt', 'w') as f:
 #     f.write(json.dumps(E_cell_number_dict))

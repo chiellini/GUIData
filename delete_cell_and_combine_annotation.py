@@ -58,8 +58,8 @@ def delete_and_combine_annotated_gui():
     DELETE_FAILED_CELLS = False
     REGENERATE_OTHER_GUI_FILES = False
 
-    COMBINE_ANNOTATED_GUI_FROM_DELETED_GUI=False
-    NOTE_THE_NUCLOC_FILES=True
+    COMBINE_ANNOTATED_GUI_FROM_DELETED_GUI=True
+    NOTE_THE_NUCLOC_FILES=False
 
     embryo_names = ["191108plc1p1", "200109plc1p1", "200113plc1p2", "200113plc1p3", "200322plc1p2", "200323plc1p1",
                     "200326plc1p3", "200326plc1p4", "200122plc1lag1ip1", "200122plc1lag1ip2", '200117plc1pop1ip2',
@@ -416,7 +416,7 @@ def delete_and_combine_annotated_gui():
                 bar.update(1)
 
         # Save the list to a text file
-        with open(os.path.join(save_folder,'changed_embryos_tp_20230429.txt'), 'w') as f:
+        with open(os.path.join(save_folder,'changed_embryos_tp_20231129.txt'), 'w') as f:
             for item in changed_embryos_tp:
                 f.write(f'{item}\n')
 
